@@ -1,9 +1,10 @@
 @JS()
 library smoothiejs;
 
-import "package:js/js.dart";
-import "package:func/func.dart";
 import "dart:html" show CanvasElement;
+import "package:js/js.dart";
+
+import 'src/func.dart';
 
 /// Type definitions for Smoothie Charts 1.34
 /// Project: https://github.com/joewalnes/smoothie
@@ -241,9 +242,11 @@ abstract class ChartOptions {
       String> get tooltipFormatter;
   external set tooltipFormatter(
       Func2<
-          num,
-          List<dynamic /*{series: TimeSeries, index: number, value: number}*/ >,
-          String> v);
+              num,
+              List<
+                  dynamic /*{series: TimeSeries, index: number, value: number}*/ >,
+              String>
+          v);
 
   /// Whether to use time of latest data as current time.
   external bool get nonRealtimeData;
@@ -283,9 +286,11 @@ abstract class ChartOptions {
       bool tooltip,
       dynamic /*{ lineWidth: number, strokeStyle: string }*/ tooltipLine,
       Func2<
-          num,
-          List<dynamic /*{series: TimeSeries, index: number, value: number}*/ >,
-          String> tooltipFormatter,
+              num,
+              List<
+                  dynamic /*{series: TimeSeries, index: number, value: number}*/ >,
+              String>
+          tooltipFormatter,
       bool nonRealtimeData,
       num displayDataFromPercentile,
       bool responsive,
@@ -334,4 +339,3 @@ class SmoothieChart {
   external void render([CanvasElement canvas, num time]);
   external static String timeFormatter(DateTime date);
 }
-
