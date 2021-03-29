@@ -3,3 +3,4 @@
 .pub/
 pubspec.lock
 build/
+/smoothie.d.ts

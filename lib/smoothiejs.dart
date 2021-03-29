@@ -38,7 +38,7 @@ abstract class TimeSeriesPresentationOptions {
 @JS()
 class TimeSeries {
   // @Ignore
-  TimeSeries.fakeConstructor$();
+  external TimeSeries.fakeConstructor$();
 
   /// Initialises a new <code>TimeSeries</code> with optional data options.
   /// Options are of the form (defaults shown):
@@ -303,7 +303,7 @@ abstract class ChartOptions {
 @JS()
 class SmoothieChart {
   // @Ignore
-  SmoothieChart.fakeConstructor$();
+  external SmoothieChart.fakeConstructor$();
   external factory SmoothieChart([ChartOptions chartOptions]);
 
   /// Change or inspect presentation options.
