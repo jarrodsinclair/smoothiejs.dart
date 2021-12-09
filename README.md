@@ -18,9 +18,9 @@ Download and place ```smoothie.js``` into the ```./example``` directory. Version
 wget -qO example/smoothie.js https://raw.githubusercontent.com/joewalnes/smoothie/1.36.0/smoothie.js
 ```
 
-## Run using Dart 2.14+
+## Run using Dart 2.12+
 
-First ensure you are running the latest version of Dart >= 2.14. Then activate webdev,
+First ensure you are running the latest version of Dart >= 2.12. Then activate webdev,
 get all dependencies, and start the develoment web-server:
 
 ```sh
