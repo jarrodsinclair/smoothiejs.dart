@@ -33,7 +33,8 @@ void createUpdatingChart(String label, TimeSeries ts) {
   );
 
   // add to the html document
-  c.streamTo(document.getElementById(label), 250);
+  var el = document.getElementById(label) as CanvasElement;
+  c.streamTo(el, 250);
 
   // add random values to the time-series object periodically
   var rnd = new math.Random();

@@ -4,13 +4,10 @@ library smoothiejs;
 import "dart:html" show CanvasElement;
 import "package:js/js.dart";
 
-import 'src/func.dart';
-
-/// Type definitions for Smoothie Charts 1.34
+/// Type definitions for Smoothie Charts 1.35
 /// Project: https://github.com/joewalnes/smoothie
 /// Definitions by: Drew Noakes <https://drewnoakes.com>
 /// Mike H. Hawley <https://github.com/mikehhawley>
-/// Definitions: https://github.com/borisyankov/DefinitelyTyped/smoothie
 @anonymous
 @JS()
 abstract class TimeSeriesOptions {
@@ -31,14 +28,25 @@ abstract class TimeSeriesPresentationOptions {
   external set fillStyle(String v);
   external num get lineWidth;
   external set lineWidth(num v);
+
+  /// Controls how lines are drawn between data points.
+  /// Default value is controlled by <code>SmoothieChart</code>'s <code>interpolation</code> option.
+  external String /*'linear'|'step'|'bezier'*/ get interpolation;
+  external set interpolation(String /*'linear'|'step'|'bezier'*/ v);
+  external String get tooltipLabel;
+  external set tooltipLabel(String v);
   external factory TimeSeriesPresentationOptions(
-      {String strokeStyle, String fillStyle, num lineWidth});
+      {String strokeStyle,
+      String fillStyle,
+      num lineWidth,
+      String /*'linear'|'step'|'bezier'*/ interpolation,
+      String tooltipLabel});
 }
 
 @JS()
 class TimeSeries {
   // @Ignore
-  external TimeSeries.fakeConstructor$();
+  
 
   /// Initialises a new <code>TimeSeries</code> with optional data options.
   /// Options are of the form (defaults shown):
@@ -96,10 +104,6 @@ abstract class GridOptions {
   external num get millisPerLine;
   external set millisPerLine(num v);
 
-  /// Controls whether grid lines are 1px sharp, or softened.
-  external bool get sharpLines;
-  external set sharpLines(bool v);
-
   /// Number of vertical sections marked out by horizontal grid lines.
   external num get verticalSections;
   external set verticalSections(num v);
@@ -112,7 +116,6 @@ abstract class GridOptions {
       num lineWidth,
       String strokeStyle,
       num millisPerLine,
-      bool sharpLines,
       num verticalSections,
       bool borderVisible});
 }
@@ -147,6 +150,32 @@ abstract class LabelOptions {
       num precision,
       bool showIntermediateLabels,
       bool intermediateLabelSameAxis});
+}
+
+@anonymous
+@JS()
+abstract class TitleOptions {
+  /// The text to display on the left side of the chart. Defaults to "".
+  external String get text;
+  external set text(String v);
+
+  /// Colour for text.
+  external String get fillStyle;
+  external set fillStyle(String v);
+  external num get fontSize;
+  external set fontSize(num v);
+  external String get fontFamily;
+  external set fontFamily(String v);
+
+  /// The vertical position of the text. Defaults to "middle".
+  external String /*'top'|'middle'|'bottom'*/ get verticalAlign;
+  external set verticalAlign(String /*'top'|'middle'|'bottom'*/ v);
+  external factory TitleOptions(
+      {String text,
+      String fillStyle,
+      num fontSize,
+      String fontFamily,
+      String /*'top'|'middle'|'bottom'*/ verticalAlign});
 }
 
 @anonymous
@@ -189,8 +218,8 @@ abstract class ChartOptions {
   /// Allows proportional padding to be added below the chart. For 10% padding, specify 1.1.
   external num get maxValueScale;
   external set maxValueScale(num v);
-  external Func1<Range, Range> get yRangeFunction;
-  external set yRangeFunction(Func1<Range, Range> v);
+  external Range Function(Range) get yRangeFunction;
+  external set yRangeFunction(Range Function(Range) v);
 
   /// Controls the rate at which y-value zoom animation occurs.
   external num get scaleSmoothing;
@@ -205,47 +234,48 @@ abstract class ChartOptions {
   external set enableDpiScaling(bool v);
 
   /// Callback function that formats the min y value label
-  external Func2<num, num, String> get yMinFormatter;
-  external set yMinFormatter(Func2<num, num, String> v);
+  external String Function(num, num) get yMinFormatter;
+  external set yMinFormatter(String Function(num, num) v);
 
   /// Callback function that formats the max y value label
-  external Func2<num, num, String> get yMaxFormatter;
-  external set yMaxFormatter(Func2<num, num, String> v);
+  external String Function(num, num) get yMaxFormatter;
+  external set yMaxFormatter(String Function(num, num) v);
 
   /// Callback function that formats the intermediate y value labels
-  external Func2<num, num, String> get yIntermediateFormatter;
-  external set yIntermediateFormatter(Func2<num, num, String> v);
+  external String Function(num, num) get yIntermediateFormatter;
+  external set yIntermediateFormatter(String Function(num, num) v);
   external num get maxDataSetLength;
   external set maxDataSetLength(num v);
 
-  /// Controls how lines are drawn between data points. Defaults to "bezier".
-  external String /*'linear'|'step'|'bezier'*/ get interpolation;
-  external set interpolation(String /*'linear'|'step'|'bezier'*/ v);
+  /// Default value for time series presentation options' <code>interpolation</code>. Defaults to "bezier".
+  external dynamic /*TimeSeriesPresentationOptions['interpolation']*/ get interpolation;
+  external set interpolation(
+      dynamic /*TimeSeriesPresentationOptions['interpolation']*/ v);
 
   /// Optional function to format time stamps for bottom of chart. You may use <code>SmoothieChart.timeFormatter</code>, or your own/
-  external Func1<DateTime, String> get timestampFormatter;
-  external set timestampFormatter(Func1<DateTime, String> v);
+  external String Function(DateTime) get timestampFormatter;
+  external set timestampFormatter(String Function(DateTime) v);
   external List<HorizontalLine> get horizontalLines;
   external set horizontalLines(List<HorizontalLine> v);
   external GridOptions get grid;
   external set grid(GridOptions v);
   external LabelOptions get labels;
   external set labels(LabelOptions v);
+  external TitleOptions get title;
+  external set title(TitleOptions v);
   external bool get tooltip;
   external set tooltip(bool v);
   external dynamic /*{ lineWidth: number, strokeStyle: string }*/ get tooltipLine;
   external set tooltipLine(
       dynamic /*{ lineWidth: number, strokeStyle: string }*/ v);
-  external Func2<
-      num,
-      List<dynamic /*{series: TimeSeries, index: number, value: number}*/ >,
-      String> get tooltipFormatter;
+  external String Function(num,
+          List<dynamic /*{series: TimeSeries, index: number, value: number}*/ >)
+      get tooltipFormatter;
   external set tooltipFormatter(
-      Func2<
+      String Function(
               num,
               List<
-                  dynamic /*{series: TimeSeries, index: number, value: number}*/ >,
-              String>
+                  dynamic /*{series: TimeSeries, index: number, value: number}*/ >)
           v);
 
   /// Whether to use time of latest data as current time.
@@ -270,26 +300,26 @@ abstract class ChartOptions {
       num maxValue,
       num minValueScale,
       num maxValueScale,
-      Func1<Range, Range> yRangeFunction,
+      Range Function(Range) yRangeFunction,
       num scaleSmoothing,
       num millisPerPixel,
       bool enableDpiScaling,
-      Func2<num, num, String> yMinFormatter,
-      Func2<num, num, String> yMaxFormatter,
-      Func2<num, num, String> yIntermediateFormatter,
+      String Function(num, num) yMinFormatter,
+      String Function(num, num) yMaxFormatter,
+      String Function(num, num) yIntermediateFormatter,
       num maxDataSetLength,
-      String /*'linear'|'step'|'bezier'*/ interpolation,
-      Func1<DateTime, String> timestampFormatter,
+      dynamic /*TimeSeriesPresentationOptions['interpolation']*/ interpolation,
+      String Function(DateTime) timestampFormatter,
       List<HorizontalLine> horizontalLines,
       GridOptions grid,
       LabelOptions labels,
+      TitleOptions title,
       bool tooltip,
       dynamic /*{ lineWidth: number, strokeStyle: string }*/ tooltipLine,
-      Func2<
+      String Function(
               num,
               List<
-                  dynamic /*{series: TimeSeries, index: number, value: number}*/ >,
-              String>
+                  dynamic /*{series: TimeSeries, index: number, value: number}*/ >)
           tooltipFormatter,
       bool nonRealtimeData,
       num displayDataFromPercentile,
@@ -303,7 +333,7 @@ abstract class ChartOptions {
 @JS()
 class SmoothieChart {
   // @Ignore
-  external SmoothieChart.fakeConstructor$();
+  
   external factory SmoothieChart([ChartOptions chartOptions]);
 
   /// Change or inspect presentation options.
@@ -339,3 +369,4 @@ class SmoothieChart {
   external void render([CanvasElement canvas, num time]);
   external static String timeFormatter(DateTime date);
 }
+

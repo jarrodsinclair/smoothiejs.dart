@@ -12,20 +12,19 @@ need to be updated also.
 ## Setup
 
 Download and place ```smoothie.js``` into the ```./example``` directory. Version
-1.34.0 is recommended.
+1.36.0 is recommended.
 
 ```sh
-wget -qO example/smoothie.js https://raw.githubusercontent.com/joewalnes/smoothie/327c79402c4250211f11ed5136576a7fb8a44344/smoothie.js
-uglifyjs --compress --mangle -- example/smoothie.js > example/smoothie-min.js
+wget -qO example/smoothie.js https://raw.githubusercontent.com/joewalnes/smoothie/1.36.0/smoothie.js
 ```
 
-## Run using Dart 2
+## Run using Dart 2.14+
 
-First ensure you are running the latest version of Dart 2. Then activate webdev,
+First ensure you are running the latest version of Dart >= 2.14. Then activate webdev,
 get all dependencies, and start the develoment web-server:
 
 ```sh
-pub global activate webdev
-pub get
-webdev serve
+dart pub global activate webdev
+dart pub get
+webdev serve example
 ```
